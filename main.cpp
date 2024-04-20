@@ -752,7 +752,14 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
     int choice, ch;
     cout << endl;
     cout << endl;
-    cout << "                        -----Hello! Welcome to the DMRC platform-----          " << endl;
+    cout << endl;
+    cout << "                                        -----Hello! Welcome to the DMRC platform-----          " << endl;
+    cout << "                                                           Made by :-" << endl;
+    cout << "                                            **************************************" << endl;
+    cout << "                                            *            Dhruv Khanna            *" << endl;
+    cout << "                                            *            Dhruv Rawat             *" << endl;
+    cout << "                                            *            Supratik Mukherjee      *" << endl;
+    cout << "                                            **************************************"; 
     cout << endl
          << endl;
 
