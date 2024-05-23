@@ -16,7 +16,7 @@ using namespace chrono;
 
 int ind;
 int point = 1;
-//FUNCTION DECLARATION
+// Forward Declaration of functions
 
 // Generates a random UMI (Unique Member Identifier) for user registration
 string setPassword2();
@@ -36,21 +36,23 @@ void updateDetails(vector<vector<string>> &details);
 // Writes user details to a file
 void writeToFile(vector<vector<string>> &details);
 
-//FOR STORING AND GETTING LOCKER NUMBER
+// FOR STORING AND GETTING LOCKER NUMBER
 void locker(string station_name, vector<vector<string>> &details);
 
-//GENERATES RANDOM LOCKER NUMBER
+// GENERATES RANDOM LOCKER NUMBER
 int getlockerNumber();
-//CHARGING FOR LOCKER USES
+
+// CHARGING FOR LOCKER USES
 void deductLockerAmount(vector<vector<string>> &details);
 
-//HELPDESK PROVIDES ALL THE NECESSARY DETAILS THAT 
+// HELPDESK PROVIDES ALL THE NECESSARY DETAILS THAT
 void helpdesk();
-//CLASS DECLARATION
+
+// CLASS DECLARATION
 class FileHandling;
 class UserDetails
 {
-protected:
+protected: // to implement the concept of encapsulation.
     string name;
     string aadhar;
     string phone_number;
@@ -86,7 +88,8 @@ public:
         cin >> gender;
         try
         {
-            cout << "Enter the amount you want to add in your account (Minimum entry is 200)." << endl;
+            cout << endl
+                 << "Enter the amount you want to add in your account (Minimum entry is 200)." << endl;
             cin >> balance;
 
             if (balance < 200)
@@ -96,27 +99,31 @@ public:
         }
         catch (const char *str)
         {
-            cout << str << endl;
+            cout << endl
+                 << str << endl;
             cout << "Enter the amount again: ";
             cin >> balance;
+            cout << endl;
         }
     }
-    //It  provides an auto-generated 4 character unique umi
+    // It  provides an auto-generated 4 character unique umi
     string setUmi();
 
-    //provided an auto-generated password
+    // provided an auto-generated password
     string setPassword();
 };
-//tHIS FUNCTION GENERATES RANDOM CHARACTER
+// tHIS FUNCTION GENERATES RANDOM CHARACTER
 char randomch(string st, int len)
 {
-    int x = rand() % len;//It will generate Random number from 0 to len-1
+    int x = rand() % len; // It will generate Random number from 0 to len-1
     return st[x];
 }
 
 string UserDetails ::setUmi()
 {
-    srand(time(0));
+    srand(time(0)); // srand func needs different seed everytime for random number generation.
+                    // time(0) returns no. of seconds elapsed from the epoch which changes every second.
+                    // and hence a different seed value everytime.
     string st = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
     int size = 4;
     string id = "";
@@ -139,10 +146,10 @@ string UserDetails ::setPassword()
     return pass;
 }
 
-class FileHandling : public UserDetails//class file handling inheriting class user details-->INHERITANCE
+class FileHandling : public UserDetails // class file handling inheriting class user details-->INHERITANCE
 {
 public:
-    FileHandling()//constructor of class file handling
+    FileHandling() // constructor of class file handling
     {
         string new_pass, new_pass_check, pass;
         cout << "Your Password is " << password << endl;
@@ -183,7 +190,7 @@ public:
         }
         duplicate.push_back(line);
     }
-    //This function provides the copy of the class 
+    // This function provides the copy of the class
     vector<vector<string>> getDVector();
 };
 
@@ -191,7 +198,7 @@ vector<vector<string>> FileHandling ::getDVector()
 {
     return duplicate;
 }
-//This function HIDES THE password -->ENCAPSULATION
+// This function maintains the security of user's data.
 string setPassword2()
 {
     string pass;
@@ -201,7 +208,8 @@ string setPassword2()
     {
         if (ch == '\b' && !pass.empty())
         {
-            cout << "\b \b";
+            cout << "\b \b"; // 1st backspace reads the input from keyboard. Then the whitespace overwrites the
+                             // character to be erased and the next backspace sets the cursor befor the overwritten character.
             pass.pop_back();
         }
         else
@@ -236,7 +244,7 @@ bool presentInFile(string umi, string pass, vector<vector<string>> &details)
 }
 int getLockerNumber()
 {
-    srand(time(nullptr));
+    srand(time(0));
     int locker_number = (rand() % 5) + 1;
     return locker_number;
 }
@@ -264,7 +272,8 @@ void locker(string station_name, vector<vector<string>> &details)
 }
 void emptyLocker(vector<vector<string>> &details)
 {
-    cout << "Your locker has been successfully emptied" << endl;
+    cout << endl
+         << "Your locker has been successfully emptied" << endl;
     details[ind][9] = "false";
 }
 
@@ -289,7 +298,8 @@ void addAmount(vector<vector<string>> &details)
     cout << "Enter the amount you want to add to your Account" << endl;
     cin >> amt;
     int fin_amt = stoi(details[ind][2]);
-    cout << fin_amt << endl;
+    cout << endl
+         << fin_amt << endl;
     fin_amt += amt;
     cout << fin_amt << endl;
     details[ind][2] = to_string(fin_amt);
@@ -305,7 +315,7 @@ void travel(vector<vector<string>> &details)
                                "Subhash Nagar", "Tilak Nagar", "Janak Puri East", "Uttam Nagar East", "Uttam Nagar West", "Nawada", "Dwarka Mor", "Dwarka"};
 
     int ch;
-    cout << "Welcome to the DMRC Platform" << endl;
+    cout << "                                     Welcome to the DMRC Platform" << endl;
     cout << "Enter 1 for Time based travel and 2 for Destination based travel" << endl;
 
     cin >> ch;
@@ -325,11 +335,12 @@ void travel(vector<vector<string>> &details)
     // Determine whether it's AM or PM
     string period = (hour < 12) ? "GOOD MORNING" : (hour > 16) ? "Good EVENING"
                                                                : "GOOD AFTERNOON";
-    cout << period << endl;
+    cout << period << endl
+         << endl;
 
     switch (ch)
     {
-    case 1://Time based travel
+    case 1: // Time based travel
     {
         string station_name;
         cout << "Please enter the station name from where you are starting your journey" << endl;
@@ -345,9 +356,10 @@ void travel(vector<vector<string>> &details)
             }
         }
         details[ind].push_back(to_string(cnt));
-        cout << "Do you want to store your belongings in the locker ?" << endl;
-        cout << "Rs 50 will be charged for the locker" << endl;
-        cout << "Enter 1 for Yes and 0 for No" << endl;
+
+        cout << "                                  Do you want to store your belongings in the locker ?" << endl;
+        cout << "                                  Rs 50 will be charged for the locker" << endl;
+        cout << "                                  Enter 1 for Yes and 0 for No" << endl;
 
         int c;
         cin >> c;
@@ -381,9 +393,9 @@ void travel(vector<vector<string>> &details)
             }
         }
 
-        cout << "PLATFORM 1: TOWARDS NOIDA ELECTRONIC CITY"
+        cout << "        PLATFORM 1: TOWARDS NOIDA ELECTRONIC CITY"
              << "        ";
-        cout << "       PLATFORM 2: TOWARDS DWARKA" << endl;
+        cout << "              PLATFORM 2: TOWARDS DWARKA" << endl;
 
         int choice;
         cout << " Enter the platform from where you want to board the train" << endl;
@@ -392,15 +404,18 @@ void travel(vector<vector<string>> &details)
         if (choice == 1)
         {
             reverse(stations.begin(), stations.end());
-            cnt = 40 - cnt;
+            cnt = 41 - cnt - 1;
         }
 
-        cout << "Press any key to start the journey, and press Enter to stop." << endl;
+        cout << endl
+             << "                   Press any key to start the journey, and press Enter to stop." << endl;
+        
         _getch(); // Wait for any key press to start the timer
 
         auto start_time = high_resolution_clock::now(); // Record the start time from the epoch ( 1st January, 1970 ).
 
-        cout << "Journey started. Press Enter to stop." << endl;
+        cout << endl
+             << "                          Journey started. Press Enter to stop." << endl;
         int check = 0;
         int flag = 0;
 
@@ -412,6 +427,13 @@ void travel(vector<vector<string>> &details)
             Sleep(2000);
         }
         cout << "Destination Reached: " << stations[cnt - 1] << endl;
+
+        cout << "Press Enter to continue..." << endl;
+        _getch();
+        if (_getch() == '\r')
+        {
+            system("cls");
+        }
 
         // Loop until Enter key is pressed
         /*REASON FOR COMPARISION WITH '\r'
@@ -435,7 +457,7 @@ void travel(vector<vector<string>> &details)
 
         auto end_time = high_resolution_clock::now(); // Record the end time again from the epoch (1st January, 1970).
         duration<double> dd = end_time - start_time;  // Calculate the duration
-        int dur = (int)dd.count();
+        int dur = (int)dd.count();                    // holds the number of seconds elapsed.
         cout << "Timer stopped. Elapsed time: " << dur << " seconds." << endl;
         int amt;
         if (dur <= 9)
@@ -466,9 +488,12 @@ void travel(vector<vector<string>> &details)
         {
             amt = 70;
         }
+        
+        Sleep(2000);
 
-        cout << "Amount charged: " << amt << endl;
+        cout << "Fetching Fare: " << amt << endl;
         int amount = stoi(details[ind][2]);
+
         if (amount - amt < 0)
         {
             cout << "Balance Low" << endl;
@@ -500,7 +525,7 @@ void travel(vector<vector<string>> &details)
     }
     break;
 
-    case 2://DESTINATION BASED TRAVEL
+    case 2: // DESTINATION BASED TRAVEL
     {
         string start, end;
         int s1, s2;
@@ -524,7 +549,7 @@ void travel(vector<vector<string>> &details)
         }
 
         int c;
-        cin >> c;//TAKING CHOICE
+        cin >> c; // TAKING CHOICE
 
         if (c)
         {
@@ -555,9 +580,9 @@ void travel(vector<vector<string>> &details)
             }
         }
 
-        cout << "PLATFORM 1: TOWARDS NOIDA ELECTRONIC CITY"
+        cout << "               PLATFORM 1: TOWARDS NOIDA ELECTRONIC CITY"
              << "        ";
-        cout << "       PLATFORM 2: TOWARDS DWARKA" << endl;
+        cout << "               PLATFORM 2: TOWARDS DWARKA" << endl;
 
         int choice;
         cout << " Enter the platform from where you want to board the train" << endl;
@@ -576,6 +601,7 @@ void travel(vector<vector<string>> &details)
             {
                 s1 = i;
             }
+
             if (stations[i] == end)
             {
                 s2 = i;
@@ -596,6 +622,7 @@ void travel(vector<vector<string>> &details)
         cout << "Destination Reached: " << stations[s2] << endl;
 
         cout << "Press Enter to continue..." << endl;
+
         _getch();
         if (_getch() == '\r')
         {
@@ -683,7 +710,7 @@ void writeToFile(vector<vector<string>> &details)
         }
     }
 }
-void updateDetails(vector<vector<string>> &details)//Helps the user to change their respective password 
+void updateDetails(vector<vector<string>> &details) // Helps the user to change their respective password
 {
     cout << "ENTER AADHAR FOR VERIFICATION\n"
          << endl;
@@ -719,7 +746,7 @@ void updateDetails(vector<vector<string>> &details)//Helps the user to change th
             if (flag == 2)
             {
                 cout << endl
-                     << "Re-Enter the new password" << endl;//2-step confirmation
+                     << "Re-Enter the new password" << endl; // 2-step confirmation
                 verify_pass = setPassword2();
                 cout << endl;
                 goto repeat;
@@ -736,7 +763,7 @@ void updateDetails(vector<vector<string>> &details)//Helps the user to change th
         cin >> ch;
         if (ch == 1)
         {
-            updateDetails(details);
+            updateDetails(details); // Recursion Used.
         }
         else if (ch == 2)
         {
@@ -745,12 +772,11 @@ void updateDetails(vector<vector<string>> &details)//Helps the user to change th
     }
 }
 
-int main()// OPERATES ALL THE FLOW OF THE CODE
+int main() // OPERATES ALL THE FLOW OF THE CODE
 {
     vector<vector<string>> details;
     vector<string> line;
     int choice, ch;
-    cout << endl;
     cout << endl;
     cout << endl;
     cout << "                                        -----Hello! Welcome to the DMRC platform-----          " << endl;
@@ -759,7 +785,7 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
     cout << "                                            *            Dhruv Khanna            *" << endl;
     cout << "                                            *            Dhruv Rawat             *" << endl;
     cout << "                                            *            Supratik Mukherjee      *" << endl;
-    cout << "                                            **************************************"; 
+    cout << "                                            **************************************";
     cout << endl
          << endl;
 
@@ -779,10 +805,10 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
     {
     case 1:
     {
-        FileHandling fh1;//CALLING File handling constructor
+        FileHandling fh1; // calls the constructor of the FileHandling class.
         vector<vector<string>> duplicate = fh1.getDVector();
         cout << endl
-             << "Congratulations!! You have successfully been registered." << endl;
+             << "                                  Congratulations!! You have successfully been registered." << endl;
 
         cout << "Press Enter to continue..." << endl;
         _getch();
@@ -815,7 +841,7 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
         string str;
         string word;
         in.open("user_details.txt");
-        while (in.eof() == 0)
+        while (!in.eof())
         {
             getline(in, str);
             stringstream obj(str);
@@ -828,12 +854,16 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
         }
         in.close();
         string umi, pass;
-        cout << "WELCOME TO LOGIN PAGE" << endl;
-        cout << "Enter the umi and password respectively" << endl;
+        cout << endl
+             << "WELCOME TO LOGIN PAGE" << endl;
+        cout << endl
+             << "Enter the umi and password respectively" << endl;
         fflush(stdin);
         getline(cin, umi);
         fflush(stdin);
-        getline(cin, pass);
+        pass = setPassword2();
+        cout << endl;
+
         if (presentInFile(umi, pass, details))
         {
             cout << "PROFILE VERIFIED" << endl;
@@ -847,7 +877,7 @@ int main()// OPERATES ALL THE FLOW OF THE CODE
             cin >> ch;
             if (ch == 3)
             {
-                cout << "Thank you for your visit\n";
+                cout << "                                        Thank you for your visit\n";
                 exit(0);
             }
             else if (ch == 1)
